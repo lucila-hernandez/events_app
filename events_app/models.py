@@ -44,4 +44,7 @@ class Event(db.Model):
 # - event_id: Integer column (foreign key)
 # - guest_id: Integer column (foreign key)
 
-guest_event_table = None
+guest_event_table = db.Table('guest_event_table',
+    db.Column('event_id', db.Integer, db.ForeignKey('event.id'), primary_key=True),
+    db.Column('guest_id', db.Integer, db.ForeignKey('guest.id'), primary_key=True)
+)

@@ -11,6 +11,13 @@ from sqlalchemy.orm import backref
 
 class Guest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(120), nullable=False, unique=True)
+    phone = db.Column(db.String(80))
+    events_attending = db.relationship('Event', secondary='guest_event_table', back_populates='guests')
+
+    def __repr__(self):
+        return f'<Guest {self.name}>'
 
 # TODO: Create a model called `Event` with the following fields:
 # - id: primary key

@@ -21,7 +21,7 @@ def index():
     # TODO: Get all events and send to the template
     all_events = Event.query.all()
     
-    return render_template('index.html')
+    return render_template('index.html', events=all_events)
 
 
 @main.route('/create', methods=['GET', 'POST'])
@@ -64,8 +64,9 @@ def event_detail(event_id):
     """Show a single event."""
 
     # TODO: Get the event with the given id and send to the template
+    event = Event.query.get_or_404(event_id)
     
-    return render_template('event_detail.html')
+    return render_template('event_detail.html', event=event)
 
 
 @main.route('/event/<event_id>', methods=['POST'])

@@ -1,7 +1,8 @@
 """Create database models to represent tables."""
-from events_app import db
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import backref
 from sqlalchemy import Enum
+from events_app import db  # Import db from __init__.py
 
 # TODO: Create a model called `Guest` with the following fields:
 # - id: primary key
@@ -15,7 +16,7 @@ class Guest(db.Model):
     name = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True)
     phone = db.Column(db.String(80))
-    events_attending = db.relationship('Event', secondary='guest_event_table', back_populates='guests')
+    events = db.relationship('Event', secondary='guest_event_table', back_populates='guests')  # Relationship named 'events'
 
     def __repr__(self):
         return f'<Guest {self.name}>'
@@ -32,7 +33,8 @@ class Event(db.Model):
     title = db.Column(db.String(80), nullable=False)
     description = db.Column(db.Text, nullable=False)
     date_and_time = db.Column(db.DateTime, nullable=False)
-    guests = db.relationship('Guest', secondary='guest_event_table', back_populates='events')
+    guests = db.relationship('Guest', secondary='guest_event_table', back_populates='events')    # back_populates should be 'events'
+
     # STRETCH CHALLENGE: Add a field `event_type` as an Enum column that denotes the
     # type of event (Party, Study, Networking, etc)
     event_type = db.Column(Enum('Party', 'Study', 'Networking', name='event_type'))

@@ -37,7 +37,7 @@ class Event(db.Model):
 
     # STRETCH CHALLENGE: Add a field `event_type` as an Enum column that denotes the
     # type of event (Party, Study, Networking, etc)
-    event_type = db.Column(Enum('Party', 'Study', 'Networking', name='event_type'))
+    # event_type = db.Column(Enum('Party', 'Study', 'Networking', name='event_type'))
 
     def __repr__(self):
         return f'<Event {self.title}>'

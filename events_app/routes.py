@@ -75,22 +75,38 @@ def rsvp(event_id):
     # TODO: Get the event with the given id from the database
     is_returning_guest = request.form.get('returning')
     guest_name = request.form.get('guest_name')
+    event = Event.query.get_or_404(event_id)
+
 
     if is_returning_guest:
         # TODO: Look up the guest by name. If the guest doesn't exist in the 
         # database, render the event_detail.html template, and pass in an error
         # message as `error`.
+        guest = Guest.query.filter_by(name=guest_name).first()
+        if not guest:
+            flash(f"No guest found with the name '{guest_name}'. Please register as a new guest.", 'error')
+            return redirect(url_for('main.event_detail', event_id=event_id))
 
         # TODO: If the guest does exist, add the event to their 
         # events_attending, then commit to the database.
-        pass
+        else:
+            if guest not in event.guests:
+                event.guests.append(guest)
+                db.session.commit()
+                flash(f"Welcome back, {guest_name}! You are now RSVP'd for {event.title}.", 'success')
+            else:
+                flash(f"You are already RSVP'd for {event.title}, {guest_name}!", 'info')
+            return redirect(url_for('main.event_detail', event_id=event_id))
     else:
         guest_email = request.form.get('email')
         guest_phone = request.form.get('phone')
 
         # TODO: Create a new guest with the given name, email, and phone, and 
         # add the event to their events_attending, then commit to the database.
-        pass
+        new_guest = Guest(name=guest_name, email=guest_email, phone=guest_phone)
+        event.guests.append(new_guest)
+        db.session.add(new_guest)
+        db.session.commit()
     
     flash('You have successfully RSVP\'d! See you there!')
     return redirect(url_for('main.event_detail', event_id=event_id))

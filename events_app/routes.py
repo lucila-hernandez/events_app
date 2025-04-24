@@ -115,5 +115,6 @@ def rsvp(event_id):
 @main.route('/guest/<guest_id>')
 def guest_detail(guest_id):
     # TODO: Get the guest with the given id and send to the template
+    guest = Guest.query.get_or_404(guest_id)
     
-    return render_template('guest_detail.html')
+    return render_template('guest_detail.html', guest=guest)
